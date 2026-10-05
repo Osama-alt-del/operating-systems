@@ -16,14 +16,20 @@ void merge(int leftstart, int leftend, int rightstart, int rightend){
 	// A is array needing sort
     // B is temp array
 
+    // Compare values from left-side and right-side
     while (i <= leftend && j <= rightend) {
+        // Left value > right value, take i
         if (A[i] <= A[j]) {
-            B[k] = A[i];     // this replaces "push_back"
+            B[k] = A[i];
             i++;
+
         } else {
+        // Right value > left value, take j
             B[k] = A[j];
             j++;
         }
+
+        // regardless increment temp array pointer
         k++;
     }
     
@@ -44,7 +50,7 @@ void merge(int leftstart, int leftend, int rightstart, int rightend){
 void my_mergesort(int left, int right){
     // base case
     if (left >= right) return;
-
+    
     int mid = left + (right - left)/2;
 
     my_mergesort(left, mid);
