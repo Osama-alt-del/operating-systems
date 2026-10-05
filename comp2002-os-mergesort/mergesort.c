@@ -1,13 +1,11 @@
-/**
- * This file implements parallel mergesort.
- */
+// This file implements parallel mergesort
 
 #include <stdio.h>
-#include <string.h> /* for memcpy */
-#include <stdlib.h> /* for malloc */
+#include <string.h> // for memcpy
+#include <stdlib.h> // for malloc
 #include "mergesort.h"
 
-/* this function will be called by mergesort() and also by parallel_mergesort(). */
+// this function will be called by mergesort() and also by parallel_mergesort()
 void merge(int leftstart, int leftend, int rightstart, int rightend){
 	int i = leftstart;    // pointer into left half
     int j = rightstart;    // pointer into right half
@@ -46,25 +44,31 @@ void merge(int leftstart, int leftend, int rightstart, int rightend){
     // num_bytes = size of array (num of elements)
 }
 
-/* this function will be called by parallel_mergesort() as its base case. */
+// this function will be called by parallel_mergesort() as its base case. 
 void my_mergesort(int left, int right){
-    // base case
+
+    // base case (both pointers meet)
     if (left >= right) return;
     
+    // find mid point 
     int mid = left + (right - left)/2;
 
+    // splits array into half until last layer
     my_mergesort(left, mid);
     my_mergesort(mid+1, right);
+
+    // merge array together recursively
     merge(left, mid, mid+1, right);
 }
 
-/* this function will be called by the testing program. */
+// this function will be called by the testing program
 void * parallel_mergesort(void *arg){
-		return NULL;
+
+	return NULL;
 }
 
 /* we build the argument for the parallel_mergesort function. */
 struct argument * buildArgs(int left, int right, int level){
-		return NULL;
-}
 
+	return NULL;
+}
