@@ -64,6 +64,21 @@ void my_mergesort(int left, int right){
 // this function will be called by the testing program
 void * parallel_mergesort(void *arg){
 
+    // unpack the argument
+    // (don't free it here: whoever built it frees it - the test program
+    // frees the top-level one, and each parent frees its children's)
+    struct argument *a = (struct argument *) arg;
+    int left = a->left;
+    int right = a->right;
+    int level = a->level;
+
+    // base case: reached the cutoff level (or nothing to split),
+    // so stop making threads and sort this range with a single thread
+    if (level >= cutoff || left >= right) {
+        my_mergesort(left, right);
+        return NULL;
+    }
+
 	return NULL;
 }
 
