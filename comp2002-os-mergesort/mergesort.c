@@ -70,5 +70,17 @@ void * parallel_mergesort(void *arg){
 /* we build the argument for the parallel_mergesort function. */
 struct argument * buildArgs(int left, int right, int level){
 
-	return NULL;
+    // allocate on the heap so the struct outlives this call
+    // (the caller frees it once the thread using it has been joined)
+    struct argument *arg = malloc(sizeof(struct argument));
+    if (arg == NULL) {
+        perror("malloc");
+        exit(EXIT_FAILURE);
+    }
+
+    arg->left = left;
+    arg->right = right;
+    arg->level = level;
+
+    return arg;
 }
