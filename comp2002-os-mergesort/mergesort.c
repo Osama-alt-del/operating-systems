@@ -79,6 +79,33 @@ void * parallel_mergesort(void *arg){
         return NULL;
     }
 
+    // find mid point
+    int mid = left + (right - left)/2;
+
+    // build the arguments for the two halves, one level further down
+    struct argument *leftArg = buildArgs(left, mid, level + 1);
+    struct argument *rightArg = buildArgs(mid + 1, right, level + 1);
+
+    // "recurse" by creating two threads that each run parallel_mergesort()
+    // on one half - this is the indirect recursion through pthread_create()
+    pthread_t leftThread, rightThread;
+    if (pthread_create(&leftThread, NULL, parallel_mergesort, leftArg) != 0 ||
+        pthread_create(&rightThread, NULL, parallel_mergesort, rightArg) != 0) {
+        perror("pthread_create");
+        exit(EXIT_FAILURE);
+    }
+
+    // wait for both halves to finish sorting before merging them
+    pthread_join(leftThread, NULL);
+    pthread_join(rightThread, NULL);
+
+    // threads are done with their arguments, so free them
+    free(leftArg);
+    free(rightArg);
+
+    // merge the two sorted halves together
+    merge(left, mid, mid + 1, right);
+
 	return NULL;
 }
 
