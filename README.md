@@ -1,20 +1,26 @@
 ## Project Number/Title 
 
 * Authors: Osama Abd-Alghany, Jying Ming Foo, Willard Gorma
-* StudentIDs: a , a1956733, a1863235
+* StudentIDs: a1885358, a1956733, a1863235 (respectively)
 * Group name: OS Group58
 
 ## Overview
 
-Concisely explain what the program does. If this exceeds a couple of
-sentences, you're going too far. Generally, you should be pulling this
-right from the project specification. We don't want you to just cut and
-paste, but paraphrase what is stated in the project specification.
+This program sorts a randomly generated array of integers using a multi-threaded merge sort. It splits the work across threads to the cutoff level the user sets, once the cutoff is reached, each thread sorts its own chunk, and the sorted pieces are then merged back together. The aim is for the parallel version to run at least twice as fast as the single-threaded version (cutoff 0) on large arrays.
 
 ## Manifest
 
-A listing of source files and other non-generated files, and a brief
-(one-line) explanation of the purpose of each file.
+- Makefile: a shortcut for building the program by storing compile command.
+  
+- mergesort.c: This file contains the functions: my_mergesort, merge, parallel_mergesort, buildArgs.
+  1. my_mergesort() is the recursive function that does the divide part: it finds the midpoint, calls itself on the left half and the right half, and only then calls   merge()
+  2. merge() takes two already sorted arrays and combines them into 1 sorted array, using B as a scratch placeand memcpy to copy the result back into A.
+  3. parallel_mergesort() creates threads (2 children per call) until the level reaches the cutoff, and at that point calls my_mergesort() for the serial sort. When the children finish, it merges their halves.
+  4. buildArgs puts the start (left), end (right) and level of the tree into a struct argument, allocated with malloc, and returns a pointer to it. This single pointer gets passed onto the thread and gets freed by parallel_mergeosrt later.
+  
+- mergesort.h: header file provided with the assignment that declares the global arrays A and B, the cutoff variable and struct argument; not modified.
+- README: The brief information of what this program does.
+- test-mergesort.c: The file which tests parallel_mergesort() directly. It tests correctness to check if sorting worked then checks how long the sorting took.
 
 ## Building the project
 
