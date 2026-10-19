@@ -7,41 +7,41 @@
 
 // this function will be called by mergesort() and also by parallel_mergesort()
 void merge(int leftstart, int leftend, int rightstart, int rightend){
-	int i = leftstart;    // pointer into left half
-    int j = rightstart;    // pointer into right half
-    int k = leftstart;    // pointer into where you're writing in B (same range as the merge)
-
-	// A is array needing sort
+    // A is array needing sort
     // B is temp array
 
-    // Compare values from left-side and right-side
+	int i = leftstart;    // pointer into left half
+    int j = rightstart;    // pointer into right half
+    int k = leftstart;    // pointer into current index to be written in B
+
+    // Compare left value and right value, decide order to go into B
     while (i <= leftend && j <= rightend) {
-        // Left value > right value, take i
+        // left value (i) < right value (j), so left is smaller, take i
         if (A[i] <= A[j]) {
             B[k] = A[i];
             i++;
 
         } else {
-        // Right value > left value, take j
+        // left value (i) > right value (j), so right is smaller, take j
             B[k] = A[j];
             j++;
         }
 
-        // regardless increment temp array pointer
+        // move forward temp array (b) pointer, next empty space to fill
         k++;
     }
     
-    // copy any remaining elements from whichever half 
+    // Incase one half is finished while the other still has values left
     while (i <= leftend)  { B[k++] = A[i++]; }
     while (j <= rightend) { B[k++] = A[j++]; }
 
-    // copy merged range back into A
+    // copy sorted values in B back into A
     memcpy(A + leftstart, B + leftstart, (rightend - leftstart + 1) * sizeof(int));
 
     // memcpy(dest, src, num_bytes)
     // destination: A + leftstart
     // source: B + leftstart
-    // num_bytes = size of array (num of elements)
+    // num_bytes = size of array (num of elements x bytes per int)
 }
 
 // this function will be called by parallel_mergesort() as its base case. 
