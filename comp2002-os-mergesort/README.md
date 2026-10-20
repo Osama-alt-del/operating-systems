@@ -35,6 +35,8 @@ This program sorts a randomly generated array of integers using a multi-threaded
 Summarise the main features of your program. It is also appropriate to
 instruct the user how to use your program.
 
+To use the program, ensure that you are in the "comp2002..." folder and running the terminal inside it. Then write the line ./test-mergesort 100000 2 123 to run the programing (settings: 100000 element, cutoff-level 2, random_seed 123). To change the settings: ./test-mergesort <num of elements> <cutoff level> <randomseed>
+
 ## Testing
 
 1. I used the same seed on purpose
@@ -72,7 +74,14 @@ Other seeds were checked separately for correctness. Seeds 1, 42, 999 and 2026 p
 
 ## Known Bugs
 
--
+None were found in the testing as described above.
+
+But they were limitations such as:
+- pthread_create fails (for example because of an extreme cutoff), the program prints an error and exits instead of recovering.
+- A very large cutoff creates thousands of threads and can run the system out of resources.
+- It needs about 800 MB of RAM at 100 million elements, because of the two arrays.
+
+These are considered as potential design limits more than bugs, running it on a different laptop with insufficient RAM (apps running in the background) could cause errors.
 
 ## Reflection and Self Assessment
 
@@ -85,8 +94,12 @@ finally "clicked" for you in the process of working on this project? How well
 did the development and testing process go for you?
 
 ## Sources Used
+To understand mergesort:
+Merge sort in 3 minutes - https://www.youtube.com/watch?v=4VqmGXwpLqc
 
-If you used any sources outside of the textbook, you should list them here. 
-If you looked something up on stackoverflow.com or you use help from AI, and 
-fail to cite it in this section, it will be considered plagiarism and dealt 
-with accordingly. So be safe CITE!
+To practice mergesort code:
+Leetcode Problem 88 - Merge Sorted Array https://leetcode.com/problems/merge-sorted-array/description/
+Leetcode Problem 912 - Sort an Array https://leetcode.com/problems/sort-an-array/description/
+
+To understand threading, arguments:
+Claude AI https://claude.ai/
