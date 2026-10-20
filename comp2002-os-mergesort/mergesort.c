@@ -65,15 +65,13 @@ void my_mergesort(int left, int right){
 void * parallel_mergesort(void *arg){
 
     // unpack the argument
-    // (don't free it here: whoever built it frees it - the test program
-    // frees the top-level one, and each parent frees its children's)
     struct argument *a = (struct argument *) arg;
     int left = a->left;
     int right = a->right;
     int level = a->level;
 
     // base case: reached the cutoff level (or nothing to split),
-    // so stop making threads and sort this range with a single thread
+    // stop making threads and mergesort the array normally
     if (level >= cutoff || left >= right) {
         my_mergesort(left, right);
         return NULL;
@@ -82,22 +80,32 @@ void * parallel_mergesort(void *arg){
     // find mid point
     int mid = left + (right - left)/2;
 
-    // build the arguments for the two halves, one level further down
+    // build the arguments for the two halves, each child is one level deeper than its parent
     struct argument *leftArg = buildArgs(left, mid, level + 1);
     struct argument *rightArg = buildArgs(mid + 1, right, level + 1);
 
-    // "recurse" by creating two threads that each run parallel_mergesort()
-    // on one half - this is the indirect recursion through pthread_create()
+    // create two threads that each run parallel_mergesort()
     pthread_t leftThread, rightThread;
+
+    // Indirect recursion: A calls B, and B calls A 
+    // (parallel_mergesort -> pthread_create -> parallel_mergesort)
     if (pthread_create(&leftThread, NULL, parallel_mergesort, leftArg) != 0 ||
         pthread_create(&rightThread, NULL, parallel_mergesort, rightArg) != 0) {
         perror("pthread_create");
         exit(EXIT_FAILURE);
     }
+    // pthread(para1, para2, para3, para4)
+    // para1: address of a pthread_t variable
+    // para2: thread settings (stack size and so on)
+    // para3: function the new thread starts running
+    // para4: single argument given to that function
+
 
     // wait for both halves to finish sorting before merging them
     pthread_join(leftThread, NULL);
     pthread_join(rightThread, NULL);
+    // pthread_join(which thread to wait for, what thread returns)
+
 
     // threads are done with their arguments, so free them
     free(leftArg);
