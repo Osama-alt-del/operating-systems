@@ -24,10 +24,11 @@ This program sorts a randomly generated array of integers using a multi-threaded
 
 ## Building the project
 
-This section should tell the user how to build your code.  If you are
-delivering a library, where does it need to be installed, or how do you use
-it? Is this an executable, if so, how can a user get up to speed as fast as
-possible?
+1. A C compiler (gcc) and make has to be installed in VSC. 
+2. Open the terminal in the folder containing Makefile and mergesort.c. 
+3. Check the makefile, look for the gcc line and whether it includes -pthread.
+4. An executable called test-mergesort should be produced in the same folder.
+5. To run the result, have a look at "Features and usage” in the README .
 
 ## Features and usage
 
